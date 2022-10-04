@@ -1,6 +1,5 @@
-IP=$(curl ifconfig.me)
 sudo apt update
-sudo apt install -y libpq5 redis-server nginx supervisor git
+sudo apt install -y libpq5 redis-server nginx supervisor git solr-tomcat
 wget https://packaging.ckan.org/python-ckan_2.9-py3-focal_amd64.deb
 sudo dpkg -i python-ckan_2.9-py3-focal_amd64.deb
 sudo apt install -y postgresql
@@ -8,8 +7,7 @@ echo 'setup password cho db ckan\n'
 sudo -u postgres createuser -S -D -R -P ckan_default
 sudo -u postgres createdb -O ckan_default ckan_default -E utf-8
 sudo sed -i '/sqlalchemy.url =/c\sqlalchemy.url = postgresql://ckan_default:123456@localhost/ckan_default' /etc/ckan/default/ckan.ini
-sudo sed -i '/ckan.site_url =/c\ckan.site_url = http://$IP' /etc/ckan/default/ckan.ini
-sudo apt install -y solr-tomcat
+sudo sed -i '/ckan.site_url =/c\ckan.site_url = http://127.0.0.1' /etc/ckan/default/ckan.ini
 sudo sed -i '/port="8080"/c\    <Connector port="8983" protocol="HTTP/1.1"' /etc/tomcat9/server.xml
 sudo mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
 sudo ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
